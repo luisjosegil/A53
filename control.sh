@@ -21,8 +21,7 @@ function read_instant_cpu_temp {
 
 function read_avg_cpu_temp {
 	local TEMPERATURE=0
-	#for i in {0..2};
-		for ((i=0; i<$AVG_NUM_TEMP_READS; i++)); do
+	for ((i=0; i<$AVG_NUM_TEMP_READS; i++)); do
 		TEMPERATURE=$(( TEMPERATURE+$(read_instant_cpu_temp) ))
 		sleep 1
 	done
