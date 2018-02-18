@@ -3,6 +3,6 @@
 	"algo" : "m7mhash",
         "user" : "picapica.orange1",
         "pass" : "000000",
- 	"cpu-efficiency" : "85",
+ 	"cpu-efficiency" : "100",
         "threads" : "4"
 }
