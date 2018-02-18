@@ -14,3 +14,6 @@ chmod +x ./TEST/m-minerd_*
 
 Command to execute it:
 ./control.sh > log.control &
+
+Commands for control:
+>cat /tmp/log.miner | grep -E 'accepted|restart'
