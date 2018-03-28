@@ -45,7 +45,7 @@ update_config_file $MNR_LABEL_NAME_OF_MINER $MNR_NAME
 kill_process_by_name $MNR_NAME
 
 cd TEST
-./$MNR_NAME -c ../cfg.json -B > $MNR_LOG_FILE 2>&1
+./$MNR_NAME -q -c ../cfg.json > $MNR_LOG_FILE 2>&1 &
 cd ..
 
 echo "new $MNR_NAME instance running with PID $(get_PID_by_name $MNR_NAME)"
