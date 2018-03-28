@@ -18,7 +18,7 @@ CONFIG_FILE_SCRIPTS="config.control"
 
 # MINER. GLOBAL VARIABLES -----------------
 MNR_CONFIG_FILE=$CONFIG_FILE
-MNR_LOG_FILE="/media/ramdisk/log.miner"
+MNR_LOG_FILE="/tmp/log.miner"
 MNR_LABEL_NAME_OF_MINER="MINER_NAME"
 
 MNR_CPU_HW_A7="ARMv7"
