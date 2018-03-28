@@ -1,5 +1,5 @@
 #!/bin/bash
-cd ~/LABO/A53
+cd /media/ramdisk/A53
 
 # GLOBAL VARIABLES ----------------
 source ./config.control
