@@ -2,5 +2,6 @@
 
 chmod +x *.sh
 chmod +x ./TEST/m-minerd_*
+sudo rm -r .git/
 cd ..
 zip -r a53.zip A53
