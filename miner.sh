@@ -40,14 +40,14 @@ function update_config_file {
 
 MNR_NAME=$(retrieve_compiled_name)
 # Update config file for the rest of scripts
-update_config_file $MNR_LABEL_NAME_OF_MINER $MNR_NAME
+update_config_file "${MNR_LABEL_NAME_OF_MINER}" "${MNR_NAME}"
 
-kill_process_by_name $MNR_NAME
+kill_process_by_name "${MNR_NAME}"
 
-cd TEST
-./$MNR_NAME -q -c ../cfg.json > $MNR_LOG_FILE 2>&1 &
-cd ..
+./TEST/$MNR_NAME -q -c cfg.json > $MNR_LOG_FILE 2>&1 &
 
-echo "new $MNR_NAME instance running with PID $(get_PID_by_name $MNR_NAME)"
+id_PID=$(get_PID_by_name "${MNR_NAME}")
+echo "new ${MNR_NAME} instance running with PID ${id_PID}"
 
 exit 0
+
