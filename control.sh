@@ -4,21 +4,12 @@ cd /media/ramdisk/A53
 # GLOBAL VARIABLES ----------------
 source ./config.control
 source ./LIB/functions_JSON
+source ./LIB/functions_HW
 
 # LOCAL VARIABLES
 LOW_TEMP_COUNTER=0
 
 # FUNCTIONS -----------------------
-function read_instant_cpu_temp {
-	local TEMP=$(sudo cat /sys/devices/virtual/thermal/thermal_zone0/temp)
-	if (( $TEMP > 1000 ));
-	then
-		echo "$(($TEMP/1000))"
-	else
-		echo "$TEMP"
-	fi
-}
-
 function read_avg_cpu_temp {
 	local TEMPERATURE=0
 	for ((i=0; i<$AVG_NUM_TEMP_READS; i++)); do
@@ -31,8 +22,6 @@ function read_avg_cpu_temp {
 function read_cur_cpu_use {
 	local FILE=$(retrieve_cfg_file)
 	read_from_JSON "$FILE" "cpu-efficiency" 
-	#local CUR_CPU_USE=$(cat $FILE | grep cpu-efficiency | sed 's/,//g' | sed 's/"//g' | awk '{ print $3 }')
-	#echo "$CUR_CPU_USE"
 }
 
 function retrieve_cfg_file {
@@ -50,8 +39,6 @@ function set_cpu_use {
 	then
 		local FILE=$(retrieve_cfg_file)
 		# We expect cpu percentage when function is called
-#		local NEW_JSON_VAL=$(echo '"'"cpu-efficiency"'" : "'"$1"'",' )
-#		sed -i "/cpu-efficiency/c\ \t$NEW_JSON_VAL" "$FILE"	
 		modify_JSON "${FILE}" "cpu-efficiency" "${VALUE}"
 	fi
 }
@@ -61,7 +48,6 @@ function reduce_cpu_use {
 	local FILE=$(retrieve_cfg_file)
 	local CUR_CPU_USE=$(read_cur_cpu_use)
 	NEW_CPU_USE=$(($CUR_CPU_USE-$CPU_USE_STEP))
-	#set_cpu_use $NEW_CPU_USE
 	modify_JSON "${FILE}" "cpu-efficiency" "${NEW_CPU_USE}"
 }
 
