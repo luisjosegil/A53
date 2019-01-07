@@ -3,6 +3,8 @@ cd /media/ramdisk/A53
 
 # GLOBAL VARIABLES ----------------
 source ./config.control
+
+# External Libraries
 source ./LIB/functions_JSON
 source ./LIB/functions_HW
 
