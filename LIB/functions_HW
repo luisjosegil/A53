@@ -3,3 +3,12 @@ function retrieve_HW_processor {
 	echo "$PROCESSOR"
 }
 
+function read_instant_cpu_temp {
+	local TEMP=$(sudo cat /sys/devices/virtual/thermal/thermal_zone0/temp)
+	if (( $TEMP > 1000 ));
+	then
+		echo "$(($TEMP/1000))"
+	else
+		echo "$TEMP"
+	fi
+}
