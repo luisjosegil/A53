@@ -1,0 +1,17 @@
+function read_from_JSON {
+	local JSON_FILE=$1
+	local PARAM_2_READ=$2
+	local VALUE=$(cat $JSON_FILE | grep "${PARAM_2_READ}" | sed 's/,//g' | sed 's/"//g' | awk '{ print $3 }')
+	echo "${VALUE}"
+}
+
+function modify_JSON {
+	local JSON_FILE=$1
+	local PARAM=$2
+	local VALUE=$3
+	local JSON_PARAM=$(echo '"'"${PARAM}"'" : "')
+	local NEW_JSON_VAL=$(echo '"'"${PARAM}"'" : "'"${VALUE}"'",' )
+
+	sed -i "/${JSON_PARAM}/c\ \t${NEW_JSON_VAL}" "${JSON_FILE}"	
+}
+
