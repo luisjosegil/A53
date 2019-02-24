@@ -15,11 +15,11 @@ source ./LIB/functions_BASH_CFG
 function retrieve_compiled_name {
 	# Depends on LIB/functions_HW
         case $(retrieve_HW_processor) in
-                "$MNR_CPU_HW_A7")
-                        echo "$MNR_COMPILED_A7"
+                "${MNR_CPU_HW_A7}")
+                        echo "${MNR_COMPILED_A7}"
                         ;;
-                "$MNR_CPU_HW_A53")
-                        echo "$MNR_COMPILED_A53"
+                "${MNR_CPU_HW_A53}")
+                        echo "${MNR_COMPILED_A53}"
                         ;;
         esac
 }
