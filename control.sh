@@ -1,4 +1,8 @@
 #!/bin/bash
+#	v9.3.0
+#	Code formatted
+
+
 cd /media/ramdisk/A53
 
 # GLOBAL VARIABLES ----------------
@@ -10,6 +14,9 @@ source ./LIB/functions_HW
 
 # LOCAL VARIABLES
 LOW_TEMP_COUNTER=0
+
+# LABELS
+LABEL_CPU_EFFICIENCY="cpu-efficiency"
 
 # FUNCTIONS -----------------------
 function read_avg_cpu_temp {
@@ -23,13 +30,13 @@ function read_avg_cpu_temp {
 
 function read_cur_cpu_use {
 	local FILE=$(retrieve_cfg_file)
-	read_from_JSON "$FILE" "cpu-efficiency" 
+	read_from_JSON "${FILE}" "${LABEL_CPU_EFFICIENCY}" 
 }
 
 function retrieve_cfg_file {
 	if (($TESTING == $FALSE ));
 	then
-		echo "$CONFIG_FILE"
+		echo "${CONFIG_FILE}"
 	else
 		echo "tmp_cfg"
 	fi
@@ -41,7 +48,7 @@ function set_cpu_use {
 	then
 		local FILE=$(retrieve_cfg_file)
 		# We expect cpu percentage when function is called
-		modify_JSON "${FILE}" "cpu-efficiency" "${VALUE}"
+		modify_JSON "${FILE}" "${LABEL_CPU_EFFICIENCY}" "${VALUE}"
 	fi
 }
 
@@ -50,14 +57,14 @@ function reduce_cpu_use {
 	local FILE=$(retrieve_cfg_file)
 	local CUR_CPU_USE=$(read_cur_cpu_use)
 	NEW_CPU_USE=$(($CUR_CPU_USE-$CPU_USE_STEP))
-	modify_JSON "${FILE}" "cpu-efficiency" "${NEW_CPU_USE}"
+	modify_JSON "${FILE}" "${LABEL_CPU_EFFICIENCY}" "${NEW_CPU_USE}"
 }
 
 function calc_increased_cpu_use {
 	local FILE=$(retrieve_cfg_file)
 	local CUR_CPU_USE=$(read_cur_cpu_use)
 	local NEW_CPU_USE=$(($CUR_CPU_USE+$CPU_USE_STEP))
-	echo "$NEW_CPU_USE"
+	echo "${NEW_CPU_USE}"
 }
 
 function kill_miner {
@@ -79,26 +86,26 @@ function sleep_x_mins {
 function check_cpu_speedup {
 	if (( $1<(($MAX_CPU_TEMP-$CPU_TEMP_HISTERESYS)) ));
 	then
-		echo "$TRUE"
+		echo "${TRUE}"
 	else
-		echo "$FALSE"
+		echo "${FALSE}"
 	fi
 
 }
 
 function sleep_random_between_a_and_b {
-	SECONDS=$(/usr/bin/shuf -i$1-$2 -n1)
+	SECONDS=$(/usr/bin/shuf -i${1}-${2} -n1)
 	if (($DEBUG_LOGS==$TRUE));
 	then
-		echo "ENG. Sleep $SECONDS sec."
+		echo "ENG. Sleep ${SECONDS} sec."
 	fi
-	/bin/sleep $SECONDS
+	/bin/sleep "${SECONDS}"
 }
 # MAIN CODE -----------------------
 #set -x
 sleep_random_between_a_and_b 0 $MAX_SECS_WAIT
 # Infinite loop
-if (($TESTING==$FALSE));
+if ((${TESTING}==${FALSE}));
 then
 	kill_miner
 	mine
@@ -106,50 +113,50 @@ fi
 
 while true
 do
-	sleep_x_mins $MINS_TO_SLEEP
+	sleep_x_mins "${MINS_TO_SLEEP}"
 	DATETIME=$(date)
 	CPU_TEMP=$(read_avg_cpu_temp)
-	if (($DEBUG_LOGS==$TRUE));
+	if ((${DEBUG_LOGS}==${TRUE}));
 	then
-		echo "$DATETIME"
-		echo "CPU Temp:$CPU_TEMP"
+		echo "${DATETIME}"
+		echo "CPU Temp:${CPU_TEMP}"
 	fi
 
-	if (($CPU_TEMP>=$MAX_CPU_TEMP));
+	if ((${CPU_TEMP}>=${MAX_CPU_TEMP}));
 	then
-		LOW_TEMP_COUNTER=$(echo "0")
+		LOW_TEMP_COUNTER="0"
 		reduce_cpu_use
-		if (($DEBUG_LOGS==$TRUE));
+		if ((${DEBUG_LOGS}==${TRUE}));
 		then
-			echo "-CPU by $CPU_USE_STEP%. Reboot miner"
+			echo "-CPU by ${CPU_USE_STEP}%. Reboot miner"
 		fi
-		if (($TESTING==$FALSE));
+		if ((${TESTING}==${FALSE}));
 		then
 	       		kill_miner 
         		mine
 		fi
-	elif (($(check_cpu_speedup $CPU_TEMP)==$TRUE)); 
+	elif (  ( $( check_cpu_speedup "${CPU_TEMP}" )==${TRUE} )  ); 
 	then
 
 		((LOW_TEMP_COUNTER++))	
-		if (($LOW_TEMP_COUNTER>=MAX_TIMES_LOW_TEMP));
+		if ((${LOW_TEMP_COUNTER}>=${MAX_TIMES_LOW_TEMP}));
 		then
-			LOW_TEMP_COUNTER=$(echo "0")
+			LOW_TEMP_COUNTER="0"
 			NEW_CPU_USE=$(calc_increased_cpu_use)
-			if (($NEW_CPU_USE<=100));
+			if ((${NEW_CPU_USE}<=100));
 			then		
-				if (($DEBUG_LOGS==$TRUE));
+				if ((${DEBUG_LOGS}==${TRUE}));
 				then
-					echo "+CPU to:$NEW_CPU_USE. Reboot miner"
+					echo "+CPU to:${NEW_CPU_USE}. Reboot miner"
 				fi
-				set_cpu_use $NEW_CPU_USE
-				if (($TESTING==$FALSE));
+				set_cpu_use "${NEW_CPU_USE}"
+				if ( (${TESTING}==${FALSE}) );
 				then
 		       			kill_miner 
 	        			mine
 				fi
 			else
-				if (($DEBUG_LOGS==$TRUE));
+				if ((${DEBUG_LOGS}==${TRUE}));
 				then
 					echo "CPU already set to MAX"
 				fi
@@ -159,8 +166,8 @@ do
 		fi
 
 	else
-		LOW_TEMP_COUNTER=$(echo "0")
-		if (($DEBUG_LOGS==$TRUE));
+		LOW_TEMP_COUNTER="0"
+		if ((${DEBUG_LOGS}==${TRUE}));
 		then
 			echo "CPU temp in range"
 		fi
