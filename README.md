@@ -17,3 +17,6 @@ Command to execute it:
 
 Commands for control:
 >cat /tmp/log.miner | grep -E 'accepted|restart'
+
+# Study monero project:
+https://github.com/LMDB/bitmonero
