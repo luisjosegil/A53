@@ -2,7 +2,5 @@
         "url" : "stratum+tcp://eu1.minerclaim.net:3333",
 	"algo" : "m7mhash",
         "user" : "picapica.orange1",
-        "pass" : "abcabc",
- 	"cpu-efficiency" : "100",
-        "threads" : "4"
+        "pass" : "abcabc"
 }
